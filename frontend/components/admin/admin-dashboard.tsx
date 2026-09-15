@@ -153,8 +153,8 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
           <div className="flex items-center gap-2.5">
             <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl ring-1 ring-border">
               <Image
-                src="/sweetex-logo.jpg"
-                alt="Sweetex AI logo"
+                src="/coco-profile.png"
+                alt="Coco AI logo"
                 fill
                 className="object-cover"
                 sizes="40px"
@@ -162,7 +162,7 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
             </span>
             <div className="min-w-0">
               <p className="truncate text-sm font-bold leading-tight">
-                Sweetex <span className="text-shine">AI</span>
+                Coco <span className="text-shine">AI</span>
               </p>
               <p className="text-[11px] font-medium text-muted-foreground">
                 Admin Portal
@@ -235,15 +235,15 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
           <div className="flex items-center gap-2">
             <span className="relative h-8 w-8 overflow-hidden rounded-lg ring-1 ring-border">
               <Image
-                src="/sweetex-logo.jpg"
-                alt="Sweetex AI logo"
+                src="/coco-profile.png"
+                alt="Coco AI logo"
                 fill
                 className="object-cover"
                 sizes="32px"
               />
             </span>
             <span className="text-base font-bold tracking-tight">
-              Sweetex <span className="text-shine">AI</span>
+              Coco <span className="text-shine">AI</span>
             </span>
           </div>
         </header>

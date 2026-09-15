@@ -12,8 +12,7 @@ User writes in Banglish (Bengali in Latin script) — respond accordingly.
 - Data/AI: Firebase Auth + Realtime Database (keys hardcoded in repo), Groq AI SDK.
 - Install deps with `yarn install --ignore-engines` (Node 20 vs @ai-sdk/groq requiring 22).
 
-## Implemented (June 2026 session)
-- Cloned repo, built and ran the app.
+## Implemented (June 2026 session)- Cloned repo, built and ran the app.
 - Removed "Operator profile" text from dashboard profile.
 - Admin route renamed `/secret-portal-sx` → `/coco-private-island`; credentials
   (username/password/secret key) all set to `iamhear` in `lib/server/admin-auth.ts`.
@@ -37,5 +36,17 @@ User writes in Banglish (Bengali in Latin script) — respond accordingly.
 - `lib/server/admin-auth.ts`, `lib/server/firebase-admin.ts`, `app/api/analyze/route.ts`
 
 ## Backlog
+### Analyzer bug fix (15 Sep 2026 run) — VERIFIED by testing agent (iteration_1.json)
+- Root cause of "Failed to analyze the chart": MODEL_ID was `qwen/qwen3.6-27b`, which returns
+  404 model_not_found on the new Groq account (`coco-ai-c363d` project's key). Fixed to
+  `qwen/qwen3.8-27b` (only vision model on that account). Verified 200 analysis end-to-end.
+- Added: capacity (503 "over capacity") detection with 3 retries + backoff per key, clearer
+  error messages (503 capacity / 502 model unavailable / 422 unreadable chart / 503 no key
+  configured), and `refundCredit()` so a failed run does not burn a daily credit.
+- Removed dead hardcoded FALLBACK_KEYS (both returned 401); keys now come only from the DB.
+- Firebase switched to project `coco-ai-c363d` (client + server) and internal admin identity
+  renamed to `portal-admin@coco-ai.internal`; rules file updated (publish in console for
+  strict rules). Admin sidebar branding changed Sweetex AI → Coco AI with the Coco logo.
+- Note: Standard tier daily limit is 35/tool (lib/tiers.ts), not 50.
 - P1: Usage history chart for users; upgrade nudge when quota nearly used.
 - P2: Admin activity log; per-key usage stats in the API key panel.

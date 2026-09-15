@@ -375,6 +375,17 @@ export async function POST(req: Request) {
 
     const API_KEYS = await getActiveGroqKeys()
 
+    if (API_KEYS.length === 0) {
+      await refund?.()
+      return Response.json(
+        {
+          error:
+            'No Groq API key is configured. The project owner needs to add one in the admin panel.',
+        },
+        { status: 503 },
+      )
+    }
+
     // Per key: 1 initial attempt + 2 retries for transient "over capacity"
     // (503) responses from Groq, with a short backoff between attempts.
     const CAPACITY_RETRIES = 3
@@ -482,8 +493,11 @@ export async function POST(req: Request) {
       )
       await refund?.()
       return Response.json(
-        { error: 'Failed to analyze the chart. Please try again.' },
-        { status: 500 },
+        {
+          error:
+            'Could not read the chart from this image. Please upload a clearer, full chart screenshot and try again.',
+        },
+        { status: 422 },
       )
     }
 

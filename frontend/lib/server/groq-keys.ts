@@ -19,12 +19,8 @@ export type GroqKeyRecord = {
 // identity in the database rules) so no rule change is needed.
 const DB_PATH = 'usage/__config/groqKeys'
 
-// Fallback keys shipped with the project, used only while the admin panel
-// has no keys stored yet.
-const FALLBACK_KEYS = [
-  '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',
-  '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',
-]
+// Fallback when the admin panel has no keys stored yet.
+const FALLBACK_KEYS: string[] = []
 
 export function maskKey(key: string): string {
   if (key.length <= 12) return `${key.slice(0, 4)}••••`
