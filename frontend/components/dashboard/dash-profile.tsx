@@ -51,7 +51,7 @@ export function DashProfile({ profile }: { profile: UserProfile }) {
       <div className="coco-d2-hero coco-rise" style={{ '--d': '40ms' } as React.CSSProperties}>
         <span className="coco-d2-hero-line" aria-hidden="true" />
 
-        <div className="relative flex flex-col items-center gap-5 text-center sm:flex-row sm:items-center sm:gap-7 sm:text-left">
+        <div className="relative flex flex-col items-center gap-3 text-center sm:flex-row sm:items-center sm:gap-7 sm:text-left">
           <span className="coco-d2-avatar">
             <Image
               src="/coco-profile.png"
@@ -63,8 +63,18 @@ export function DashProfile({ profile }: { profile: UserProfile }) {
             />
           </span>
 
+          <span
+            className="flex items-center gap-2 sm:hidden"
+            aria-hidden="true"
+            data-testid="profile-divider"
+          >
+            <span className="h-px w-10 bg-gradient-to-r from-transparent to-[#a688ff]/60" />
+            <span className="h-1.5 w-1.5 rotate-45 rounded-[2px] bg-[#c4a6ff] shadow-[0_0_10px_rgba(196,166,255,0.8)]" />
+            <span className="h-px w-10 bg-gradient-to-l from-transparent to-[#a688ff]/60" />
+          </span>
+
           <div className="min-w-0 flex-1">
-            <div className="mt-3 flex flex-col items-center gap-2.5 sm:flex-row sm:items-center">
+            <div className="flex flex-col items-center gap-2.5 sm:mt-3 sm:flex-row sm:items-center">
               <h1
                 className="coco-display coco-title-gradient text-balance text-[1.7rem] leading-tight sm:text-[2.3rem]"
                 data-testid="dashboard-name"
