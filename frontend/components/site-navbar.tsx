@@ -10,7 +10,7 @@ const NAV_LINKS = [
   { label: 'About', href: '#about' },
   { label: 'Features', href: '#features' },
   { label: 'Pricing', href: '#pricing' },
-  { label: 'Support', href: 'https://t.me/Ayan_sx', external: true },
+  { label: 'Support', href: 'https://t.me/Ayan_Dead', external: true },
 ]
 
 export function SiteNavbar() {

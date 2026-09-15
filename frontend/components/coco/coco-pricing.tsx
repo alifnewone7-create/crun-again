@@ -96,7 +96,7 @@ export function CocoPricing() {
                 Create account
               </a>
               <a
-                href="https://t.me/Ayan_sx"
+                href="https://t.me/Ayan_Dead"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="coco-btn w-full border border-[#dccdff] bg-[#ece4ff] text-[var(--iris)] hover:bg-[#e0d3ff]"
@@ -143,7 +143,7 @@ export function CocoPricing() {
             </ul>
 
             <a
-              href="https://t.me/Ayan_sx"
+              href="https://t.me/Ayan_Dead"
               target="_blank"
               rel="noopener noreferrer"
               className="coco-btn coco-btn-primary mt-6 w-full"

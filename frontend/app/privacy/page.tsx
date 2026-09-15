@@ -91,7 +91,7 @@ const SECTIONS = [
   {
     heading: '12. Contact Us',
     body: [
-      'If you have questions about this Privacy Policy or how your data is handled, reach out to us on Telegram at @Ayan_sx.',
+      'If you have questions about this Privacy Policy or how your data is handled, reach out to us on Telegram at @Ayan_Dead.',
     ],
   },
 ]
@@ -172,7 +172,7 @@ export default function PrivacyPolicyPage() {
           <div className="mt-10 flex flex-col items-center gap-4 text-center">
             <p className="coco-muted text-sm">Still have a question about your data?</p>
             <a
-              href="https://t.me/Ayan_sx"
+              href="https://t.me/Ayan_Dead"
               target="_blank"
               rel="noopener noreferrer"
               className="coco-btn coco-btn-ghost"

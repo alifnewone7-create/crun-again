@@ -47,7 +47,7 @@ export function CocoFooter() {
               Privacy policy
             </a>
             <a
-              href="https://t.me/Ayan_sx"
+              href="https://t.me/Ayan_Dead"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-white"

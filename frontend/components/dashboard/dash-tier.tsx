@@ -101,7 +101,7 @@ export function DashTier() {
                 </button>
 
                 <a
-                  href="https://t.me/Ayan_sx"
+                  href="https://t.me/Ayan_Dead"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="coco-btn coco-btn-primary w-full sm:w-auto"

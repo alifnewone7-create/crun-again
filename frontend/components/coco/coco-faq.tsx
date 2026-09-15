@@ -45,7 +45,7 @@ export function CocoFaq() {
             Still unsure? The support desk answers within minutes on Telegram.
           </p>
           <a
-            href="https://t.me/Ayan_sx"
+            href="https://t.me/Ayan_Dead"
             target="_blank"
             rel="noopener noreferrer"
             className="coco-btn coco-btn-ghost mt-7"

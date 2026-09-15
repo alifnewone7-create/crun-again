@@ -11,7 +11,7 @@ const NAV_LINKS = [
   { label: 'How it works', href: '#how' },
   { label: 'Access', href: '#pricing' },
   { label: 'FAQ', href: '#faq' },
-  { label: 'Support', href: 'https://t.me/Ayan_sx', external: true },
+  { label: 'Support', href: 'https://t.me/Ayan_Dead', external: true },
 ]
 
 export function CocoNavbar() {

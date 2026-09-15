@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 
 const FOOTER_LINKS = [
   { label: 'Privacy Policy', href: '/privacy' },
-  { label: 'Support', href: 'https://t.me/Ayan_sx', external: true },
+  { label: 'Support', href: 'https://t.me/Ayan_Dead', external: true },
 ]
 
 export function SiteFooter() {
