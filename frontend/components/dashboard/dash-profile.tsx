@@ -2,14 +2,34 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, Headset } from 'lucide-react'
+import { useState } from 'react'
+import { ArrowRight, Check, Copy, Eye, EyeOff, Headset } from 'lucide-react'
 import { type UserProfile } from '@/components/auth-provider'
 import { normalizeTier, TIER_LABEL } from '@/lib/tiers'
 import { GlyphTier, GlyphMailRune } from '@/components/dashboard/dash-glyphs'
 
+function maskEmail(email: string) {
+  const [user, domain] = email.split('@')
+  if (!domain) return '•'.repeat(Math.max(6, email.length))
+  const head = user.slice(0, 2)
+  return `${head}${'•'.repeat(Math.max(3, user.length - 2))}@${domain.replace(/^[^.]+/, (d) => d[0] + '•'.repeat(Math.max(2, d.length - 1)))}`
+}
+
 export function DashProfile({ profile }: { profile: UserProfile }) {
   const tier = normalizeTier(profile.plan)
   const firstName = profile.name.split(' ')[0] || 'Trader'
+  const [showEmail, setShowEmail] = useState(false)
+  const [copied, setCopied] = useState(false)
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(profile.email)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1600)
+    } catch {
+      /* clipboard unavailable */
+    }
+  }
 
   return (
     <section
@@ -80,13 +100,40 @@ export function DashProfile({ profile }: { profile: UserProfile }) {
             <span className="coco-d2-meta-icon">
               <GlyphMailRune className="h-[17px] w-[17px]" />
             </span>
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <p className="coco-mono text-[9.5px] uppercase tracking-[0.16em] text-white/40">
                 Email
               </p>
-              <p className="truncate text-[13px] text-white/80" data-testid="dashboard-email">
-                {profile.email}
+              <p
+                className="truncate text-[13px] text-white/80"
+                data-testid="dashboard-email"
+              >
+                {showEmail ? profile.email : maskEmail(profile.email)}
               </p>
+            </div>
+            <div className="flex flex-none items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => setShowEmail((v) => !v)}
+                aria-label={showEmail ? 'Hide email' : 'Show email'}
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/12 bg-white/[0.05] text-white/60 transition-colors hover:border-white/25 hover:text-white"
+                data-testid="email-toggle-btn"
+              >
+                {showEmail ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+              </button>
+              <button
+                type="button"
+                onClick={copyEmail}
+                aria-label="Copy email"
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/12 bg-white/[0.05] text-white/60 transition-colors hover:border-white/25 hover:text-white"
+                data-testid="email-copy-btn"
+              >
+                {copied ? (
+                  <Check className="h-3.5 w-3.5 text-[#8ef0c4]" />
+                ) : (
+                  <Copy className="h-3.5 w-3.5" />
+                )}
+              </button>
             </div>
           </div>
         </div>
