@@ -4,15 +4,15 @@
     ".write": false,
 
     "users": {
-      ".read": "auth != null && auth.token.email == 'portal-admin@sweetex-ai.internal'",
+      ".read": "auth != null && auth.token.email == 'portal-admin@coco-ai.internal'",
 
       "$uid": {
-        ".read": "auth != null && (auth.uid == $uid || auth.token.email == 'portal-admin@sweetex-ai.internal')",
+        ".read": "auth != null && (auth.uid == $uid || auth.token.email == 'portal-admin@coco-ai.internal')",
 
-        ".write": "auth != null && (auth.uid == $uid || auth.token.email == 'portal-admin@sweetex-ai.internal')",
+        ".write": "auth != null && (auth.uid == $uid || auth.token.email == 'portal-admin@coco-ai.internal')",
 
         "plan": {
-          ".validate": "auth.token.email == 'portal-admin@sweetex-ai.internal' || newData.val() == 'free'"
+          ".validate": "auth.token.email == 'portal-admin@coco-ai.internal' || newData.val() == 'free'"
         },
 
         "name": { ".validate": "newData.isString()" },
@@ -24,18 +24,18 @@
     },
 
     "usage": {
-      ".read": "auth != null && auth.token.email == 'portal-admin@sweetex-ai.internal'",
+      ".read": "auth != null && auth.token.email == 'portal-admin@coco-ai.internal'",
 
       "$uid": {
-        ".read": "auth != null && (auth.uid == $uid || auth.token.email == 'portal-admin@sweetex-ai.internal')",
+        ".read": "auth != null && (auth.uid == $uid || auth.token.email == 'portal-admin@coco-ai.internal')",
 
-        ".write": "auth != null && auth.token.email == 'portal-admin@sweetex-ai.internal'"
+        ".write": "auth != null && auth.token.email == 'portal-admin@coco-ai.internal'"
       }
     },
 
     "config": {
-      ".read": "auth != null && auth.token.email == 'portal-admin@sweetex-ai.internal'",
-      ".write": "auth != null && auth.token.email == 'portal-admin@sweetex-ai.internal'"
+      ".read": "auth != null && auth.token.email == 'portal-admin@coco-ai.internal'",
+      ".write": "auth != null && auth.token.email == 'portal-admin@coco-ai.internal'"
     }
   }
 }

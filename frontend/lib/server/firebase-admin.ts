@@ -17,7 +17,7 @@ const DB_URL =
 
 // Dedicated internal admin identity (NOT a real end user). The security rules
 // reference this exact email to authorize tier + usage writes.
-export const ADMIN_DB_EMAIL = 'portal-admin@sweetex-ai.internal'
+export const ADMIN_DB_EMAIL = 'portal-admin@coco-ai.internal'
 const ADMIN_DB_PASSWORD = 'Sx9!portal_Rtdb#adminOnly_2f7Kd$Qa1zP'
 
 const IDENTITY_BASE = 'https://identitytoolkit.googleapis.com/v1'
