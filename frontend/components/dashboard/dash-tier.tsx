@@ -7,8 +7,6 @@ import {
   FEATURES,
   FEATURE_LABEL,
   TIER_LABEL,
-  TIER_ORDER,
-  TIER_DAILY_LIMIT,
   QUOTA_RESET_NOTE,
   type FeatureKey,
 } from '@/lib/tiers'
@@ -64,7 +62,7 @@ export function DashTier() {
           </p>
         </div>
 
-        <div className="mt-10 grid items-start gap-4 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.45fr)]">
+        <div className="mt-10 grid items-start gap-4 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.5fr)] lg:items-stretch">
           {/* Current tier card */}
           <div className="coco-shade relative flex flex-col overflow-hidden rounded-[24px] p-6 sm:p-7">
             <span className="coco-d2-hero-line" aria-hidden="true" />
@@ -91,7 +89,7 @@ export function DashTier() {
                 )}
               </span>
               <span className="coco-mono mb-1.5 text-[10.5px] uppercase tracking-[0.14em] text-white/50">
-                {isUnlimited ? 'no limits' : 'runs / tool / day'}
+                {isUnlimited ? 'no limits' : 'Per Day'}
               </span>
             </div>
 
@@ -107,38 +105,12 @@ export function DashTier() {
               <p className="mt-2 text-[12px] leading-relaxed text-white/55">{QUOTA_RESET_NOTE}</p>
             )}
 
-            <ul className="mt-6 flex flex-1 flex-col gap-2">
-              {TIER_ORDER.filter((t) => t !== 'admin').map((t) => {
-                const l = TIER_DAILY_LIMIT[t]
-                return (
-                  <li
-                    key={t}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.05] px-3.5 py-2.5 text-[13px]"
-                    style={
-                      t === tier
-                        ? {
-                            borderColor: 'rgba(196,166,255,0.5)',
-                            background: 'rgba(150,100,255,0.16)',
-                          }
-                        : undefined
-                    }
-                  >
-                    <span className={t === tier ? 'font-semibold text-white' : 'text-white/65'}>
-                      {TIER_LABEL[t]}
-                    </span>
-                    <span className="coco-mono text-[11px] uppercase tracking-[0.1em] text-white/55">
-                      {l === null ? 'unlimited' : l === 0 ? 'locked' : `${l} / tool`}
-                    </span>
-                  </li>
-                )
-              })}
-            </ul>
-
             <a
               href="https://t.me/Ayan_sx"
               target="_blank"
               rel="noopener noreferrer"
-              className="coco-btn coco-btn-primary mt-6 w-full"
+              className="coco-btn coco-btn-primary mt-6 w-full sm:mt-auto"
+              data-testid="tier-upgrade-link"
             >
               <KeyRound className="h-4 w-4" />
               {hasAccess ? 'Upgrade licence' : 'Unlock access'}
