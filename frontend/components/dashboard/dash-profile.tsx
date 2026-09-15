@@ -2,45 +2,14 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
-import { ArrowRight, Check, Copy, Headset } from 'lucide-react'
+import { ArrowRight, Headset } from 'lucide-react'
 import { type UserProfile } from '@/components/auth-provider'
-import { normalizeTier, TIER_LABEL, TIER_DAILY_LIMIT } from '@/lib/tiers'
-import {
-  GlyphTier,
-  GlyphMailRune,
-  GlyphKeyId,
-  GlyphClockRing,
-} from '@/components/dashboard/dash-glyphs'
-
-function formatJoined(ts: number) {
-  if (!ts) return '—'
-  try {
-    return new Date(ts).toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-    })
-  } catch {
-    return '—'
-  }
-}
+import { normalizeTier, TIER_LABEL } from '@/lib/tiers'
+import { GlyphTier, GlyphMailRune } from '@/components/dashboard/dash-glyphs'
 
 export function DashProfile({ profile }: { profile: UserProfile }) {
-  const [copied, setCopied] = useState(false)
   const tier = normalizeTier(profile.plan)
-  const limit = TIER_DAILY_LIMIT[tier]
   const firstName = profile.name.split(' ')[0] || 'Trader'
-
-  const copyUid = async () => {
-    try {
-      await navigator.clipboard.writeText(profile.uid)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1600)
-    } catch {
-      /* clipboard unavailable */
-    }
-  }
 
   return (
     <section
@@ -106,7 +75,7 @@ export function DashProfile({ profile }: { profile: UserProfile }) {
         </div>
 
         {/* identity meta */}
-        <div className="relative mt-7 grid gap-2.5 sm:grid-cols-3">
+        <div className="relative mt-7">
           <div className="coco-d2-meta">
             <span className="coco-d2-meta-icon">
               <GlyphMailRune className="h-[17px] w-[17px]" />
@@ -117,47 +86,6 @@ export function DashProfile({ profile }: { profile: UserProfile }) {
               </p>
               <p className="truncate text-[13px] text-white/80" data-testid="dashboard-email">
                 {profile.email}
-              </p>
-            </div>
-          </div>
-
-          <button type="button" onClick={copyUid} className="coco-d2-meta text-left">
-            <span className="coco-d2-meta-icon">
-              <GlyphKeyId className="h-[17px] w-[17px]" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="coco-mono text-[9.5px] uppercase tracking-[0.16em] text-white/40">
-                Operator ID
-              </p>
-              <p className="truncate font-mono text-[12.5px] text-white/80">{profile.uid}</p>
-            </div>
-            <span className="flex h-7 w-7 flex-none items-center justify-center rounded-lg text-white/55">
-              {copied ? (
-                <Check className="h-3.5 w-3.5 text-[#8ef0c4]" />
-              ) : (
-                <Copy className="h-3.5 w-3.5" />
-              )}
-            </span>
-          </button>
-
-          <div className="coco-d2-meta">
-            <span className="coco-d2-meta-icon">
-              <GlyphClockRing className="h-[17px] w-[17px]" />
-            </span>
-            <div className="min-w-0">
-              <p className="coco-mono text-[9.5px] uppercase tracking-[0.16em] text-white/40">
-                Member since
-              </p>
-              <p className="truncate text-[13px] text-white/80">
-                {formatJoined(profile.createdAt)}
-                <span className="ml-2 text-white/40">
-                  ·{' '}
-                  {limit === null
-                    ? 'unlimited'
-                    : limit === 0
-                      ? 'locked'
-                      : `${limit}/tool daily`}
-                </span>
               </p>
             </div>
           </div>
