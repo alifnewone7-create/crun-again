@@ -1,7 +1,7 @@
 import { generateText } from 'ai'
 import { createGroq } from '@ai-sdk/groq'
 import { z } from 'zod'
-import { bearerToken, consumeCredit } from '@/lib/server/usage'
+import { bearerToken, consumeCredit, refundCredit } from '@/lib/server/usage'
 import { getActiveGroqKeys } from '@/lib/server/groq-keys'
 
 export const maxDuration = 60
@@ -10,8 +10,18 @@ export const maxDuration = 60
 // (`config/groqKeys`). When one key hits its rate limit / daily quota (HTTP
 // 429), the next key is tried automatically.
 
-// Vision-capable Qwen 3.6 27B model, served directly by Groq.
-const MODEL_ID = 'qwen/qwen3.6-27b'
+// Vision-capable Qwen 3.8 27B model, served directly by Groq.
+const MODEL_ID = 'qwen/qwen3.8-27b'
+
+function isCapacityError(message: string) {
+  const m = message.toLowerCase()
+  return (
+    message.includes('503') ||
+    m.includes('over capacity') ||
+    m.includes('service unavailable') ||
+    m.includes('try again and back off')
+  )
+}
 
 function isRateLimitError(message: string) {
   const m = message.toLowerCase()
@@ -323,6 +333,8 @@ function stripToJson(text: string): string {
 }
 
 export async function POST(req: Request) {
+  // When the AI call fails the consumed credit is handed back.
+  let refund: (() => Promise<void>) | null = null
   try {
     const { image, mode } = (await req.json()) as {
       image?: string
@@ -348,6 +360,8 @@ export async function POST(req: Request) {
         { status: gate.status },
       )
     }
+    const token = bearerToken(req)
+    refund = () => refundCredit(token, feature)
 
     const system = mode === 'real' ? REAL_PROMPT : OTC_PROMPT
 
@@ -356,61 +370,93 @@ export async function POST(req: Request) {
     // the busy message. An invalid key is skipped the same way.
     let text: string | null = null
     let lastRateLimited = false
+    let lastCapacity = false
     let lastError: unknown = null
 
     const API_KEYS = await getActiveGroqKeys()
 
-    for (let i = 0; i < API_KEYS.length; i++) {
+    // Per key: 1 initial attempt + 2 retries for transient "over capacity"
+    // (503) responses from Groq, with a short backoff between attempts.
+    const CAPACITY_RETRIES = 3
+
+    keyLoop: for (let i = 0; i < API_KEYS.length; i++) {
       const groq = createGroq({ apiKey: API_KEYS[i] })
-      try {
-        const result = await generateText({
-          model: groq(MODEL_ID),
-          system: `${system}\n\n${JSON_SHAPE}`,
-          temperature: 0.2,
-          // Keep this modest: Groq's free tier caps total tokens-per-minute
-          // (prompt + image + requested max) at 8000, and the JSON output is small.
-          maxOutputTokens: 1800,
-          providerOptions: {
-            // Qwen 3.6 on Groq supports JSON Object mode but NOT strict
-            // json_schema structured outputs. We request json_object and
-            // validate with Zod ourselves so the output matches our shape.
-            groq: {
-              structuredOutputs: false,
-              reasoningEffort: 'none',
+      for (let attempt = 0; attempt <= CAPACITY_RETRIES; attempt++) {
+        try {
+          const result = await generateText({
+            model: groq(MODEL_ID),
+            system: `${system}\n\n${JSON_SHAPE}`,
+            temperature: 0.2,
+            // Keep this modest: Groq's free tier caps total tokens-per-minute
+            // (prompt + image + requested max) at 8000, and the JSON output is small.
+            maxOutputTokens: 1800,
+            providerOptions: {
+              // Qwen on Groq supports JSON Object mode but NOT strict
+              // json_schema structured outputs. We request json_object and
+              // validate with Zod ourselves so the output matches our shape.
+              groq: {
+                structuredOutputs: false,
+                reasoningEffort: 'none',
+              },
             },
-          },
-          messages: [
-            {
-              role: 'user',
-              content: [
-                {
-                  type: 'text',
-                  text: 'Analyze this trading chart screenshot and return the 3-step result as a single JSON object exactly matching the required shape.',
-                },
-                { type: 'image', image },
-              ],
-            },
-          ],
-        })
-        text = result.text
-        break
-      } catch (keyErr) {
-        const keyMessage = keyErr instanceof Error ? keyErr.message : String(keyErr)
-        lastError = keyErr
-        if (isRateLimitError(keyMessage) || isAuthError(keyMessage)) {
-          lastRateLimited = isRateLimitError(keyMessage)
-          console.log(
-            `[v0] Groq key #${i + 1} unavailable (${isRateLimitError(keyMessage) ? 'rate limit' : 'auth'}), trying next key...`,
-          )
-          continue
+            messages: [
+              {
+                role: 'user',
+                content: [
+                  {
+                    type: 'text',
+                    text: 'Analyze this trading chart screenshot and return the 3-step result as a single JSON object exactly matching the required shape.',
+                  },
+                  { type: 'image', image },
+                ],
+              },
+            ],
+          })
+          text = result.text
+          break keyLoop
+        } catch (keyErr) {
+          const keyMessage =
+            keyErr instanceof Error ? keyErr.message : String(keyErr)
+          lastError = keyErr
+
+          if (isCapacityError(keyMessage)) {
+            lastCapacity = true
+            console.log(
+              `[v0] Groq model over capacity (key #${i + 1}, attempt ${attempt + 1}), retrying...`,
+            )
+            if (attempt < CAPACITY_RETRIES) {
+              await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)))
+              continue
+            }
+            continue keyLoop
+          }
+
+          if (isRateLimitError(keyMessage) || isAuthError(keyMessage)) {
+            lastRateLimited = isRateLimitError(keyMessage)
+            console.log(
+              `[v0] Groq key #${i + 1} unavailable (${isRateLimitError(keyMessage) ? 'rate limit' : 'auth'}), trying next key...`,
+            )
+            continue keyLoop
+          }
+
+          // A non-quota error (bad request, network, etc.) is not fixable by
+          // switching keys, so stop and let the outer handler report it.
+          throw keyErr
         }
-        // A non-quota error (bad request, network, etc.) is not fixable by
-        // switching keys, so stop and let the outer handler report it.
-        throw keyErr
       }
     }
 
     if (text === null) {
+      await refund?.()
+      if (lastCapacity) {
+        return Response.json(
+          {
+            error:
+              'The AI model is temporarily over capacity on Groq. Please wait a few seconds and analyze again.',
+          },
+          { status: 503 },
+        )
+      }
       if (lastRateLimited) {
         return Response.json(
           {
@@ -434,6 +480,7 @@ export async function POST(req: Request) {
         '[v0] parse error:',
         parseErr instanceof Error ? parseErr.message : String(parseErr),
       )
+      await refund?.()
       return Response.json(
         { error: 'Failed to analyze the chart. Please try again.' },
         { status: 500 },
@@ -481,6 +528,7 @@ export async function POST(req: Request) {
     return Response.json(output)
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)
+    await refund?.()
 
     if (
       message.toLowerCase().includes('api key') ||
@@ -510,6 +558,27 @@ export async function POST(req: Request) {
         { status: 429 },
       )
     }
+
+    if (isCapacityError(message)) {
+      return Response.json(
+        {
+          error:
+            'The AI model is temporarily over capacity on Groq. Please wait a few seconds and analyze again.',
+        },
+        { status: 503 },
+      )
+    }
+
+    if (message.toLowerCase().includes('does not exist')) {
+      return Response.json(
+        {
+          error:
+            'The configured AI model is not available on this Groq account. The project owner needs to update the model.',
+        },
+        { status: 502 },
+      )
+    }
+
 
     return Response.json(
       { error: 'Failed to analyze the chart. Please try again.' },

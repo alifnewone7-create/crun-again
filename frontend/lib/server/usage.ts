@@ -152,3 +152,22 @@ export async function consumeCredit(
     remaining: limit === null ? null : Math.max(0, limit - next),
   }
 }
+
+// Give a credit back when the work a credit was taken for failed (e.g. the AI
+// provider was over capacity), so a user is never charged for a failed run.
+export async function refundCredit(
+  idToken: string | null,
+  feature: FeatureKey,
+  amount = 1,
+): Promise<void> {
+  try {
+    const user = await verifyIdToken(idToken)
+    if (!user) return
+    const day = todayKey()
+    const path = `usage/${user.uid}/${day}/${feature}`
+    const current = Number(await dbGet<number>(path)) || 0
+    await dbSet(path, Math.max(0, current - Math.max(1, Math.floor(amount))))
+  } catch {
+    /* a failed refund must never break the error response */
+  }
+}
