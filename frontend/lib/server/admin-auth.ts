@@ -1,6 +1,6 @@
 // SERVER-ONLY admin panel authentication.
 //
-// The admin panel lives at /secret-portal-sx and is protected by a fixed set
+// The admin panel lives at /coco-private-island and is protected by a fixed set
 // of credentials kept here on the server (never shipped to the client). A
 // successful login sets a short HMAC-signed, httpOnly cookie that subsequent
 // admin API calls verify.
@@ -9,10 +9,9 @@ import 'server-only'
 import { createHmac, timingSafeEqual } from 'node:crypto'
 
 // Admin panel credentials (kept server-side only).
-const ADMIN_USERNAME = 'AYAN0004'
-const ADMIN_PASSWORD = 'SXON@TOP009'
-const ADMIN_SECRET_KEY =
-  'sec_K9#mT4@Xv8!Qa2$Lf7&Np5^Hs1*Dz6%Rw3@Ju0#Ce9$By4&Gk8*Pm2^Yn5!Vo7'
+const ADMIN_USERNAME = 'iamhear'
+const ADMIN_PASSWORD = 'iamhear'
+const ADMIN_SECRET_KEY = 'iamhear'
 
 // Secret used to sign the admin session cookie.
 const COOKIE_SECRET = 'sx-portal-cookie-secret::9d4Fa!kQ72zP#rtdb$sweetex'

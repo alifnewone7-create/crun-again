@@ -7,7 +7,6 @@ import { ArrowRight, Check, Copy, Headset } from 'lucide-react'
 import { type UserProfile } from '@/components/auth-provider'
 import { normalizeTier, TIER_LABEL, TIER_DAILY_LIMIT } from '@/lib/tiers'
 import {
-  GlyphOperator,
   GlyphTier,
   GlyphMailRune,
   GlyphKeyId,
@@ -65,11 +64,6 @@ export function DashProfile({ profile }: { profile: UserProfile }) {
           </span>
 
           <div className="min-w-0 flex-1">
-            <span className="coco-eyebrow">
-              <GlyphOperator className="h-3.5 w-3.5" />
-              Operator profile
-            </span>
-
             <div className="mt-3 flex flex-col items-center gap-2.5 sm:flex-row sm:items-center">
               <h1
                 className="coco-display coco-title-gradient text-balance text-[1.7rem] leading-tight sm:text-[2.3rem]"
