@@ -11,9 +11,9 @@
 
 import 'server-only'
 
-const API_KEY = 'AIzaSyAHhtE985RjzhKLhGd-42HZCzuyplqkiYo'
+const API_KEY = 'AIzaSyAo1DFoWoWo-W5zFEf5IqSJN6GB1EHp7Bo'
 const DB_URL =
-  'https://sweetex-ai-default-rtdb.asia-southeast1.firebasedatabase.app'
+  'https://coco-ai-c363d-default-rtdb.asia-southeast1.firebasedatabase.app'
 
 // Dedicated internal admin identity (NOT a real end user). The security rules
 // reference this exact email to authorize tier + usage writes.
