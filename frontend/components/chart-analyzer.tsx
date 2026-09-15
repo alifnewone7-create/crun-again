@@ -313,17 +313,11 @@ export function ChartAnalyzer({ mode }: { mode: AnalyzerMode }) {
             />
             <span className="coco-drop-term-label">
               <Cpu className="h-3.5 w-3.5 shrink-0 text-accent" />
-              coco@ai ~ {mode === 'real' ? 'real-chart' : 'otc-chart'} · awaiting
-              upload
+              coco@ai ~ {mode === 'real' ? 'real-chart' : 'otc-chart'}
             </span>
           </span>
 
           <span className="coco-drop-body">
-            <span className="coco-drop-tag">
-              <Cpu className="h-3 w-3" />
-              {mode === 'real' ? 'Real market engine' : 'OTC engine'}
-            </span>
-
             <span className="coco-drop-core">
               <span className="coco-drop-ring" aria-hidden="true" />
               <span className="coco-drop-ring coco-drop-ring--slow" aria-hidden="true" />
