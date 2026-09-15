@@ -62,60 +62,60 @@ export function DashTier() {
           </p>
         </div>
 
-        <div className="mt-10 grid items-start gap-4 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.5fr)] lg:items-stretch">
-          {/* Current tier card */}
-          <div className="coco-shade relative flex flex-col overflow-hidden rounded-[24px] p-6 sm:p-7">
+        <div className="mt-10 flex flex-col gap-4">
+          {/* Current tier card — flat strip above the quota panel */}
+          <div
+            className="coco-shade relative overflow-hidden rounded-[24px] p-5 sm:p-6"
+            data-testid="tier-plan-card"
+          >
             <span className="coco-d2-hero-line" aria-hidden="true" />
-            <div className="flex items-center gap-3">
-              <span className="coco-d2-meta-icon h-11 w-11 rounded-[14px]">
-                <GlyphTier className="h-5 w-5" />
-              </span>
-              <div className="min-w-0">
-                <p className="coco-mono text-[9.5px] uppercase tracking-[0.16em] text-white/45">
-                  Current plan
-                </p>
-                <p className="coco-sub text-[19px] text-white">{TIER_LABEL[tier]}</p>
+            <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
+              <div className="flex items-center gap-3.5">
+                <span className="coco-d2-meta-icon h-12 w-12 flex-none rounded-[15px]">
+                  <GlyphTier className="h-5 w-5" />
+                </span>
+                <div className="min-w-0">
+                  <p className="coco-mono text-[9.5px] uppercase tracking-[0.16em] text-white/45">
+                    Current plan
+                  </p>
+                  <p
+                    className="coco-sub text-[21px] leading-tight text-white sm:text-[24px]"
+                    data-testid="tier-plan-name"
+                  >
+                    {TIER_LABEL[tier]}
+                  </p>
+                </div>
+              </div>
+
+              <div className="h-px w-full bg-white/10 lg:hidden" aria-hidden="true" />
+
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3 lg:flex-none">
+                <button
+                  type="button"
+                  onClick={() => setNoteOpen((v) => !v)}
+                  className="flex items-center gap-2 rounded-xl border border-white/12 bg-white/[0.05] px-3.5 py-2.5 text-left text-[12.5px] text-white/70 transition-colors hover:border-white/25 hover:text-white"
+                  data-testid="tier-reset-toggle"
+                >
+                  <GlyphClockRing className="h-4 w-4 flex-none text-[#c4a6ff]" />
+                  Resets daily at 6:00 AM (BST)
+                </button>
+
+                <a
+                  href="https://t.me/Ayan_sx"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="coco-btn coco-btn-primary w-full sm:w-auto"
+                  data-testid="tier-upgrade-link"
+                >
+                  <KeyRound className="h-4 w-4" />
+                  {hasAccess ? 'Upgrade licence' : 'Unlock access'}
+                  <ArrowRight className="h-4 w-4" />
+                </a>
               </div>
             </div>
-
-            <div className="mt-6 flex items-end gap-2">
-              <span className="coco-display text-[2.4rem] leading-none text-white sm:text-[3rem]">
-                {isUnlimited ? (
-                  <GlyphInfinite className="h-10 w-10" />
-                ) : limit === 0 ? (
-                  '0'
-                ) : (
-                  limit
-                )}
-              </span>
-              <span className="coco-mono mb-1.5 text-[10.5px] uppercase tracking-[0.14em] text-white/50">
-                {isUnlimited ? 'no limits' : 'Per Day'}
-              </span>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setNoteOpen((v) => !v)}
-              className="mt-5 flex items-center gap-2 rounded-xl border border-white/12 bg-white/[0.05] px-3.5 py-2.5 text-left text-[12.5px] text-white/70 transition-colors hover:border-white/25 hover:text-white"
-            >
-              <GlyphClockRing className="h-4 w-4 flex-none text-[#c4a6ff]" />
-              Resets daily at 6:00 AM (BST)
-            </button>
             {noteOpen && (
-              <p className="mt-2 text-[12px] leading-relaxed text-white/55">{QUOTA_RESET_NOTE}</p>
+              <p className="mt-3 text-[12px] leading-relaxed text-white/55">{QUOTA_RESET_NOTE}</p>
             )}
-
-            <a
-              href="https://t.me/Ayan_sx"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="coco-btn coco-btn-primary mt-6 w-full sm:mt-auto"
-              data-testid="tier-upgrade-link"
-            >
-              <KeyRound className="h-4 w-4" />
-              {hasAccess ? 'Upgrade licence' : 'Unlock access'}
-              <ArrowRight className="h-4 w-4" />
-            </a>
           </div>
 
           {/* Quota panel */}
@@ -135,7 +135,7 @@ export function DashTier() {
             <div className="my-5 h-px w-full bg-gradient-to-r from-[#d8c9ff] via-[var(--hairline)] to-transparent" />
 
             {loading ? (
-              <ul className="grid gap-3 sm:grid-cols-2">
+              <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 {FEATURES.map((f) => (
                   <li
                     key={f}
@@ -155,7 +155,7 @@ export function DashTier() {
                 </p>
               </div>
             ) : (
-              <ul className="grid gap-3 sm:grid-cols-2">
+              <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 {FEATURES.map((feature) => (
                   <QuotaCard
                     key={feature}
