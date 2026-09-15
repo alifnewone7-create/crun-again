@@ -273,9 +273,10 @@ export function ChartAnalyzer({ mode }: { mode: AnalyzerMode }) {
           <ResultBlock result={result} />
           <Button
             onClick={reset}
-            className="btn-luxe h-14 w-full gap-2 rounded-2xl text-base font-bold"
+            data-testid="analyze-another-btn"
+            className="btn-luxe h-12 w-full gap-2 rounded-xl text-[15px] font-bold sm:h-14 sm:rounded-2xl sm:text-base"
           >
-            <RefreshCw className="refresh-spin h-5 w-5" />
+            <RefreshCw className="refresh-spin h-4 w-4 sm:h-5 sm:w-5" />
             Analyze another chart
           </Button>
         </div>
@@ -296,6 +297,26 @@ export function ChartAnalyzer({ mode }: { mode: AnalyzerMode }) {
           <span className="coco-drop-sheen" aria-hidden="true" />
           <span className="coco-drop-grid" aria-hidden="true" />
           <span className="coco-drop-sweep" aria-hidden="true" />
+
+          <span className="coco-drop-term">
+            <span
+              className="coco-drop-term-dot bg-gradient-to-br from-destructive to-[var(--gold)]"
+              aria-hidden="true"
+            />
+            <span
+              className="coco-drop-term-dot bg-gradient-to-br from-[var(--gold)] to-up"
+              aria-hidden="true"
+            />
+            <span
+              className="coco-drop-term-dot bg-gradient-to-br from-up to-accent"
+              aria-hidden="true"
+            />
+            <span className="coco-drop-term-label">
+              <Cpu className="h-3.5 w-3.5 shrink-0 text-accent" />
+              coco@ai ~ {mode === 'real' ? 'real-chart' : 'otc-chart'} · awaiting
+              upload
+            </span>
+          </span>
 
           <span className="coco-drop-body">
             <span className="coco-drop-tag">
@@ -362,7 +383,7 @@ export function ChartAnalyzer({ mode }: { mode: AnalyzerMode }) {
             <span className="ml-2 flex min-w-0 items-center gap-1.5 font-mono text-xs text-muted-foreground">
               <Cpu className="h-3.5 w-3.5 shrink-0 text-accent" />
               <span className="truncate whitespace-nowrap">
-                sweetex@ai — {mode === 'real' ? 'Real Chart Analyzer' : 'Otc Chart Analyzer'}
+                coco@ai — {mode === 'real' ? 'Real Chart Analyzer' : 'Otc Chart Analyzer'}
               </span>
             </span>
           </div>
@@ -392,17 +413,19 @@ export function ChartAnalyzer({ mode }: { mode: AnalyzerMode }) {
                 </div>
 
                 {!loading && (
-                  <div className="flex flex-col gap-3 sm:flex-row">
+                  <div className="flex flex-col gap-2.5 sm:flex-row sm:gap-3">
                     <Button
                       onClick={analyze}
-                      className="btn-luxe h-14 w-full gap-2 rounded-2xl text-base font-bold sm:flex-1"
+                      data-testid="analyze-chart-btn"
+                      className="btn-luxe h-12 w-full gap-2 rounded-xl text-[15px] font-bold sm:h-14 sm:flex-1 sm:rounded-2xl sm:text-base"
                     >
-                      <Scan className="h-5 w-5" />
+                      <Scan className="h-4 w-4 sm:h-5 sm:w-5" />
                       Analyze Chart
                     </Button>
                     <Button
                       onClick={reset}
-                      className="btn-luxe-outline h-14 w-full gap-2 rounded-2xl px-5 text-base font-semibold sm:w-auto sm:flex-none"
+                      data-testid="clear-chart-btn"
+                      className="btn-luxe-outline h-11 w-full gap-2 rounded-xl px-5 text-sm font-semibold sm:h-14 sm:w-auto sm:flex-none sm:rounded-2xl sm:text-base"
                     >
                       <X className="h-4 w-4" />
                       Clear

@@ -724,7 +724,7 @@
   background:
     radial-gradient(85% 70% at 50% 0%, rgba(176, 130, 255, 0.3), transparent 64%),
     linear-gradient(165deg, #2c1a6b 0%, #1d1049 46%, #130a33 100%);
-  padding: 40px 22px 34px;
+  padding: 0;
   text-align: center;
   box-shadow:
     rgba(255, 255, 255, 0.12) 0 1px 0 0 inset,
@@ -737,8 +737,51 @@
 }
 @media (min-width: 640px) {
   .coco-drop {
-    padding: 62px 40px 54px;
     border-radius: 34px;
+  }
+}
+
+/* Terminal strip at the top of the upload bay (softer twin of the preview
+   card header, so both states share one design language). */
+.coco-drop-term {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-bottom: 1px solid rgba(196, 166, 255, 0.22);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.02));
+  padding: 10px 14px;
+}
+@media (min-width: 640px) {
+  .coco-drop-term {
+    padding: 12px 20px;
+  }
+}
+.coco-drop-term-dot {
+  height: 8px;
+  width: 8px;
+  flex: none;
+  border-radius: 999px;
+  opacity: 0.9;
+}
+.coco-drop-term-label {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 6px;
+  margin-left: 6px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: rgba(235, 226, 255, 0.72);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (min-width: 640px) {
+  .coco-drop-term-label {
+    font-size: 12px;
   }
 }
 .coco-drop:hover {
@@ -807,7 +850,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
+  padding: 26px 18px 24px;
+}
+@media (min-width: 640px) {
+  .coco-drop-body {
+    gap: 14px;
+    padding: 46px 36px 42px;
+  }
 }
 .coco-drop-tag {
   display: inline-flex;
@@ -827,9 +877,15 @@
   position: relative;
   display: grid;
   place-items: center;
-  height: 96px;
-  width: 96px;
+  height: 78px;
+  width: 78px;
   margin-top: 2px;
+}
+@media (min-width: 640px) {
+  .coco-drop-core {
+    height: 96px;
+    width: 96px;
+  }
 }
 .coco-drop-ring {
   position: absolute;
@@ -859,8 +915,8 @@
 .coco-drop-core-tile {
   display: grid;
   place-items: center;
-  height: 58px;
-  width: 58px;
+  height: 50px;
+  width: 50px;
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   background: linear-gradient(160deg, #b98cff 0%, #8a53ff 46%, #5a22dd 100%);
@@ -870,12 +926,18 @@
     rgba(124, 69, 255, 0.6) 0 16px 34px -12px;
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
+@media (min-width: 640px) {
+  .coco-drop-core-tile {
+    height: 58px;
+    width: 58px;
+  }
+}
 .coco-drop:hover .coco-drop-core-tile {
   transform: translateY(-3px) scale(1.05);
 }
 .coco-drop-title {
   font-family: var(--font-display), ui-sans-serif, sans-serif;
-  font-size: 20px;
+  font-size: 18.5px;
   font-weight: 700;
   letter-spacing: -0.02em;
   background-image: linear-gradient(100deg, #ffffff 0%, #e6dbff 52%, #c4a6ff 100%);
@@ -903,12 +965,12 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 6px;
+  margin-top: 4px;
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.22);
   background: linear-gradient(180deg, #9a66ff 0%, #7a41ff 52%, #6130e6 100%);
-  padding: 12px 22px;
-  font-size: 14px;
+  padding: 11px 20px;
+  font-size: 13.5px;
   font-weight: 600;
   color: #fff;
   box-shadow:
