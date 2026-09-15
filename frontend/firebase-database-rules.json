@@ -31,6 +31,11 @@
 
         ".write": "auth != null && auth.token.email == 'portal-admin@sweetex-ai.internal'"
       }
+    },
+
+    "config": {
+      ".read": "auth != null && auth.token.email == 'portal-admin@sweetex-ai.internal'",
+      ".write": "auth != null && auth.token.email == 'portal-admin@sweetex-ai.internal'"
     }
   }
 }

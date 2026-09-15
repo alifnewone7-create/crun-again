@@ -2,26 +2,13 @@ import { generateText } from 'ai'
 import { createGroq } from '@ai-sdk/groq'
 import { z } from 'zod'
 import { bearerToken, consumeCredit } from '@/lib/server/usage'
+import { getActiveGroqKeys } from '@/lib/server/groq-keys'
 
 export const maxDuration = 60
 
-// Multiple Groq API keys for automatic failover. When one key hits its
-// rate limit / daily quota (HTTP 429), the next key is tried automatically.
-// Best practice: use keys from SEPARATE Groq accounts so each has its own quota.
-//
-// No env vars needed — just add your keys directly to this array (one per line).
-const API_KEYS = Array.from(
-  new Set(
-    [
-      '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',
-      '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',
-      // Add more keys here (one per line), e.g.:
-      // 'gsk_yourNextAccountKeyHere',
-    ]
-      .map((k) => k.trim())
-      .filter(Boolean),
-  ),
-)
+// Groq API keys are managed from the admin panel and stored in the database
+// (`config/groqKeys`). When one key hits its rate limit / daily quota (HTTP
+// 429), the next key is tried automatically.
 
 // Vision-capable Qwen 3.6 27B model, served directly by Groq.
 const MODEL_ID = 'qwen/qwen3.6-27b'
@@ -370,6 +357,8 @@ export async function POST(req: Request) {
     let text: string | null = null
     let lastRateLimited = false
     let lastError: unknown = null
+
+    const API_KEYS = await getActiveGroqKeys()
 
     for (let i = 0; i < API_KEYS.length; i++) {
       const groq = createGroq({ apiKey: API_KEYS[i] })
