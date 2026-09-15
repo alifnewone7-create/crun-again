@@ -296,7 +296,6 @@ export function ChartAnalyzer({ mode }: { mode: AnalyzerMode }) {
         >
           <span className="coco-drop-sheen" aria-hidden="true" />
           <span className="coco-drop-grid" aria-hidden="true" />
-          <span className="coco-drop-sweep" aria-hidden="true" />
 
           <span className="coco-drop-term">
             <span
