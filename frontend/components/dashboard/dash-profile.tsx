@@ -7,6 +7,21 @@ import { type UserProfile } from '@/components/auth-provider'
 import { normalizeTier, TIER_LABEL } from '@/lib/tiers'
 import { GlyphTier, GlyphMailRune } from '@/components/dashboard/dash-glyphs'
 
+const CANDLES: { h: number; dir: 'up' | 'down' }[] = [
+  { h: 22, dir: 'down' },
+  { h: 38, dir: 'up' },
+  { h: 30, dir: 'down' },
+  { h: 52, dir: 'up' },
+  { h: 44, dir: 'up' },
+  { h: 26, dir: 'down' },
+  { h: 60, dir: 'up' },
+  { h: 34, dir: 'down' },
+  { h: 48, dir: 'up' },
+  { h: 28, dir: 'down' },
+  { h: 56, dir: 'up' },
+  { h: 36, dir: 'up' },
+]
+
 export function DashProfile({ profile }: { profile: UserProfile }) {
   const tier = normalizeTier(profile.plan)
   const firstName = profile.name.split(' ')[0] || 'Trader'
@@ -19,6 +34,16 @@ export function DashProfile({ profile }: { profile: UserProfile }) {
     >
       <div className="coco-d2-hero coco-rise" style={{ '--d': '40ms' } as React.CSSProperties}>
         <span className="coco-d2-hero-line" aria-hidden="true" />
+        <span className="coco-d2-candles" aria-hidden="true" data-testid="profile-candles">
+          {CANDLES.map((c, i) => (
+            <span
+              key={i}
+              className="coco-d2-candle"
+              data-dir={c.dir}
+              style={{ height: `${c.h}%`, '--d': `${i * 220}ms` } as React.CSSProperties}
+            />
+          ))}
+        </span>
 
         <div className="relative flex flex-col items-center gap-3 text-center sm:flex-row sm:items-center sm:gap-7 sm:text-left">
           <span className="coco-d2-avatar">

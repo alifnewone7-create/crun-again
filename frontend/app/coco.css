@@ -2352,3 +2352,82 @@
   background: linear-gradient(180deg, #f7f2ff 0%, #ffffff 100%);
   box-shadow: rgba(109, 59, 255, 0.12) 0 10px 24px -14px;
 }
+
+/* ── Profile card: live candlestick backdrop ─────────────────────────── */
+.coco-d2-candles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: inherit;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 0 18px 0 0;
+  mask-image: linear-gradient(90deg, transparent, #000 55%);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 55%);
+}
+.coco-d2-candle {
+  position: relative;
+  width: 7px;
+  border-radius: 3px;
+  transform-origin: bottom;
+  animation: coco-candle-grow 3.6s ease-in-out infinite;
+  animation-delay: var(--d, 0ms);
+  opacity: 0.55;
+}
+.coco-d2-candle::before,
+.coco-d2-candle::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 1px;
+  translate: -50% 0;
+  background: inherit;
+  opacity: 0.6;
+}
+.coco-d2-candle::before {
+  bottom: 100%;
+  height: 14px;
+}
+.coco-d2-candle::after {
+  top: 100%;
+  height: 10px;
+}
+.coco-d2-candle[data-dir='up'] {
+  background: linear-gradient(180deg, #a688ff, #6d3bff);
+  box-shadow: 0 0 14px rgba(150, 100, 255, 0.55);
+}
+.coco-d2-candle[data-dir='down'] {
+  background: linear-gradient(180deg, #7ecdff, #2f6ddb);
+  box-shadow: 0 0 14px rgba(80, 140, 255, 0.45);
+}
+@keyframes coco-candle-grow {
+  0%,
+  100% {
+    transform: scaleY(0.55);
+    opacity: 0.32;
+  }
+  45% {
+    transform: scaleY(1);
+    opacity: 0.72;
+  }
+}
+@media (max-width: 639px) {
+  .coco-d2-candles {
+    gap: 7px;
+    padding-right: 10px;
+    opacity: 0.55;
+    mask-image: linear-gradient(90deg, transparent, #000 70%);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 70%);
+  }
+  .coco-d2-candle {
+    width: 5px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .coco-d2-candle {
+    animation: none;
+  }
+}
