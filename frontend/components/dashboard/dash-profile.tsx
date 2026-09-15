@@ -54,7 +54,7 @@ export function DashProfile({ profile }: { profile: UserProfile }) {
         <div className="relative flex flex-col items-center gap-5 text-center sm:flex-row sm:items-center sm:gap-7 sm:text-left">
           <span className="coco-d2-avatar">
             <Image
-              src="/coco-ai.jpg"
+              src="/coco-profile.png"
               alt={`${firstName} avatar`}
               width={128}
               height={128}
